@@ -1,12 +1,12 @@
 import { Module } from '@nestjs/common';
-import { BlogController } from './app.controller';
-import { BlogService } from './app.service';
 import { MongooseModule } from '@nestjs/mongoose';
-import { BlogSchema, PostTemplateSchema } from './schemas/post.schema';
+
+import { PostTemplateController } from './app.controller';
+import { PostTemplateService } from './app.service';
+import { PostTemplateSchema } from './schemas/post.schema';
 
 @Module({
   imports: [
-    MongooseModule.forFeature([{ name: 'Post', schema: BlogSchema }]),
     MongooseModule.forFeature([
       { name: 'PostTemplate', schema: PostTemplateSchema },
     ]),
@@ -15,7 +15,7 @@ import { BlogSchema, PostTemplateSchema } from './schemas/post.schema';
       useUnifiedTopology: true,
     }),
   ],
-  controllers: [BlogController],
-  providers: [BlogService],
+  controllers: [PostTemplateController],
+  providers: [PostTemplateService],
 })
 export class AppModule {}

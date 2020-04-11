@@ -1,3 +1,4 @@
+import { PostTemplateDTO } from './post-template/dto/post-template.dto';
 import {
   Controller,
   Get,
@@ -13,11 +14,14 @@ import { ClientProxy } from '@nestjs/microservices';
 import { CreatePostDTO } from './posts/dto/create-post.dto';
 import { ValidateObjectId } from './posts/shared/validate-object-id.pipes';
 import { IPost } from './posts/interfaces/post.interface';
+import { IPostTemplate } from './post-template/interfaces/post-template.interface';
 
 @Controller()
 export class PostsController {
   constructor(
     @Inject('POSTS') private readonly clientPostsService: ClientProxy,
+    @Inject('POST_TEMPLATE')
+    private readonly clientPostTemplateService: ClientProxy,
   ) {}
 
   @Get('/posts')
@@ -38,8 +42,11 @@ export class PostsController {
 
   @Post('/post')
   async addPost(@Body() createPostDTO: CreatePostDTO) {
+    const tmpResponse: IPostTemplate = await this.clientPostTemplateService
+      .send('add_post_template', createPostDTO.templateId)
+      .toPromise();
     const postsResponse: IPost = await this.clientPostsService
-      .send('add_post', createPostDTO)
+      .send('add_post', { ...createPostDTO, templateId: tmpResponse })
       .toPromise();
     return postsResponse;
   }
@@ -47,20 +54,39 @@ export class PostsController {
   @Put('/edit')
   async editPost(
     @Query('postID', new ValidateObjectId()) postID: string,
+    @Query('postTemplateID', new ValidateObjectId()) postTemplateID: string,
     @Body() createPostDTO: CreatePostDTO,
   ) {
-    let params: object = { postID, createPostDTO };
+    let params;
+
+    params = {
+      postTemplateID,
+      postTemplateDTO: createPostDTO.templateId,
+    };
+    const tmpResponse: IPostTemplate = await this.clientPostTemplateService
+      .send('edit_post_template', params)
+      .toPromise();
+
+    params = {
+      postID,
+      createPostDTO: { ...createPostDTO, templateId: tmpResponse },
+    };
     const postsResponse: IPost = await this.clientPostsService
       .send('edit_post', params)
       .toPromise();
+
     return postsResponse;
   }
 
   @Delete('/delete')
   async deletePost(@Query('postID', new ValidateObjectId()) postID: string) {
-    const postsResponse: IPost = await this.clientPostsService
+    const postsResponse = await this.clientPostsService
       .send('delete_post', postID)
       .toPromise();
-    return postsResponse;
+
+    const tmpResponse = await this.clientPostTemplateService
+      .send('delete_post_template', postsResponse)
+      .toPromise();
+    return tmpResponse;
   }
 }

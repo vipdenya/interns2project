@@ -13,6 +13,14 @@ import { ClientsModule, Transport } from '@nestjs/microservices';
           port: 8888,
         },
       },
+      {
+        name: 'POST_TEMPLATE',
+        transport: Transport.TCP,
+        options: {
+          host: '127.0.0.1',
+          port: 8889,
+        },
+      },
     ]),
   ],
   controllers: [PostsController],

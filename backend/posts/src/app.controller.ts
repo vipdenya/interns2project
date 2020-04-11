@@ -1,19 +1,6 @@
-import {
-  Controller,
-  Get,
-  Res,
-  HttpStatus,
-  Param,
-  NotFoundException,
-  Post,
-  Body,
-  Query,
-  Put,
-  Delete,
-} from '@nestjs/common';
+import { Controller, NotFoundException } from '@nestjs/common';
 import { BlogService } from './app.service';
 import { CreatePostDTO } from './dto/create-post.dto';
-import { ValidateObjectId } from './shared/validate-object-id.pipes';
 import { MessagePattern } from '@nestjs/microservices';
 
 @Controller()
@@ -41,7 +28,7 @@ export class BlogController {
   }
 
   @MessagePattern('edit_post')
-  async editPost(params: { postID; createPostDTO: CreatePostDTO }) {
+  async editPost(params) {
     const editedPost = await this.blogService.editPost(
       params.postID,
       params.createPostDTO,

@@ -1,0 +1,29 @@
+{
+	"version": "2.0.0",
+	"tasks": [
+		{
+			"type": "npm",
+			"script": "start:dev",
+			"path": "post-template/",
+			"problemMatcher": [],
+			"label": "npm: start:dev - post-template",
+			"detail": "nest start --watch"
+		},
+		{
+			"type": "npm",
+			"script": "start:dev",
+			"path": "gateway/",
+			"problemMatcher": [],
+			"label": "npm: start:dev - gateway",
+			"detail": "nest start --watch"
+		},
+		{
+			"type": "npm",
+			"script": "start:dev",
+			"path": "posts/",
+			"problemMatcher": [],
+			"label": "npm: start:dev - posts",
+			"detail": "nest start --watch"
+		}
+	]
+}
