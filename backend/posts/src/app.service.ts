@@ -3,16 +3,17 @@ import { Model } from 'mongoose';
 import { InjectModel } from '@nestjs/mongoose';
 import { IPost } from './interfaces/post.interface';
 import { CreatePostDTO } from './dto/create-post.dto';
-import { IPostTemplate } from './interfaces/post-template.interface';
 
 @Injectable()
-export class BlogService {
+export class PostService {
   constructor(@InjectModel('Post') private readonly postModel: Model<IPost>) {}
 
-  async getPosts(): Promise<IPost[]> {
+  async getPosts(options): Promise<IPost[]> {
     const posts = await this.postModel
       .find()
-      .populate('templateId', '-__v')
+      .skip(Number(options.skip))
+      .limit(Number(options.limit))
+      .populate('templateId')
       .exec();
     return posts;
   }

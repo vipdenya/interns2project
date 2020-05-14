@@ -1,6 +1,7 @@
 import * as mongoose from 'mongoose';
+import mongoosePaginate from 'mongoose-paginate-v2';
 
-export const BlogSchema = new mongoose.Schema({
+export const PostSchema = new mongoose.Schema({
   title: { type: String, required: true },
   body: { type: String, required: true },
   templateId: {
@@ -15,3 +16,5 @@ export const PostTemplateSchema = new mongoose.Schema({
   title: { type: String, required: true },
   body: { type: String, required: true },
 });
+
+PostSchema.plugin(mongoosePaginate);

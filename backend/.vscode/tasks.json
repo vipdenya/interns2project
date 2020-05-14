@@ -24,6 +24,14 @@
 			"problemMatcher": [],
 			"label": "npm: start:dev - posts",
 			"detail": "nest start --watch"
+		},
+		{
+			"type": "npm",
+			"script": "start:dev",
+			"path": "attachments/",
+			"problemMatcher": [],
+			"label": "npm: start:dev - attachments",
+			"detail": "nest start --watch"
 		}
 	]
 }

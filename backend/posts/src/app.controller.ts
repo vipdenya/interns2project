@@ -1,15 +1,16 @@
 import { Controller, NotFoundException } from '@nestjs/common';
-import { BlogService } from './app.service';
+import { PostService } from './app.service';
 import { CreatePostDTO } from './dto/create-post.dto';
 import { MessagePattern } from '@nestjs/microservices';
 
 @Controller()
-export class BlogController {
-  constructor(private blogService: BlogService) {}
+export class PostController {
+  constructor(private blogService: PostService) {}
 
   @MessagePattern('get_all_posts')
-  async getPosts() {
-    const posts = await this.blogService.getPosts();
+  async getPosts(req) {
+    console.log(req);
+    const posts = await this.blogService.getPosts(req);
     if (!posts) throw new NotFoundException('Posts does not exist!');
     return posts;
   }

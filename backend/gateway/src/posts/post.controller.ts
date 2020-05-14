@@ -1,4 +1,4 @@
-import { PostTemplateDTO } from './post-template/dto/post-template.dto';
+import { PostTemplateDTO } from '../post-template/dto/post-template.dto';
 import {
   Controller,
   Get,
@@ -9,12 +9,13 @@ import {
   Query,
   Put,
   Delete,
+  Req,
 } from '@nestjs/common';
 import { ClientProxy } from '@nestjs/microservices';
-import { CreatePostDTO } from './posts/dto/create-post.dto';
-import { ValidateObjectId } from './posts/shared/validate-object-id.pipes';
-import { IPost } from './posts/interfaces/post.interface';
-import { IPostTemplate } from './post-template/interfaces/post-template.interface';
+import { CreatePostDTO } from './dto/create-post.dto';
+import { ValidateObjectId } from './shared/validate-object-id.pipes';
+import { IPost } from './interfaces/post.interface';
+import { IPostTemplate } from '../post-template/interfaces/post-template.interface';
 
 @Controller()
 export class PostsController {
@@ -25,9 +26,10 @@ export class PostsController {
   ) {}
 
   @Get('/posts')
-  async getPosts() {
+  async getPosts(@Req() req) {
+    console.log(req.query);
     const postsResponse: IPost = await this.clientPostsService
-      .send('get_all_posts', {})
+      .send('get_all_posts', req.query)
       .toPromise();
     return postsResponse;
   }
